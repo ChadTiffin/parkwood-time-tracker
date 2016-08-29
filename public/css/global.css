@@ -1,0 +1,59 @@
+header {
+	color: #777;
+	margin: 10px;
+}
+
+header .logo {
+	width: 400px;
+	margin: 10px;
+}
+
+header .title {
+	display: inline-block;
+	font-size: 24pt;
+	vertical-align: middle;
+	margin: 10px;
+	margin-left: 20px;
+}
+
+header form {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+}
+
+header nav .btn {
+	margin: 10px;
+} 
+
+header .clock-status {
+	position: absolute;
+	bottom: 0px;
+	right: 10px;
+	color: #F65555;
+	font-size: 14pt;
+}
+
+.main {
+	margin: 30px;
+	margin-top: 100px;
+	max-width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.btn-xs img {
+	width: 25px;
+}
+
+.summary .table td {
+	text-align: right;
+}
+
+.edit-controls button {
+	opacity: 0.1;
+}
+
+tr:hover .edit-controls button {
+	opacity: 1;
+}
