@@ -23,3 +23,5 @@ Route::post("edit","HomeController@editLog");
 Route::post("delete-log","HomeController@deleteLog");
 
 Route::get("blade-test","HomeController@bladeTest");
+
+Route::any("send-email-report","HomeController@sendEmailReport");

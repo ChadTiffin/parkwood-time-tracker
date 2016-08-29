@@ -13,21 +13,21 @@
 			
 					<h3>Date Range</h3>
 					
-						<label class="control-label col-sm-3">From </label>
-						<div class='input-group date'>
-							<input type='text' class="form-control" id='filter-from-date' value="{{Request::segment(2)}}"/>
-							<span class="input-group-addon">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</span>
-						</div>
+					<label class="control-label col-sm-3">From </label>
+					<div class='input-group date'>
+						<input type='text' class="form-control" id='filter-from-date' value="{{Request::segment(2)}}"/>
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
 
-						<label class="control-label col-sm-3">To </label>
-						<div class='input-group date '>
-							<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(3)}}"/>
-							<span class="input-group-addon">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</span>
-						</div>
+					<label class="control-label col-sm-3">To </label>
+					<div class='input-group date '>
+						<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(3)}}"/>
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
 					
 
 					<h3>Shift Length</h3>
@@ -56,6 +56,8 @@
 			<div>
 
 				<h2>Send Email Report</h2>
+
+				<p>Send an email report of the total hrs of a date range.</p>
 
 				<input type="button" value="Send Email Report..." class="btn btn-primary btn-lg" id="send-email-report">
 			</div>
@@ -161,60 +163,54 @@
 <!-- Send Email Report Modal -->
 <div id="email-report" class="modal fade">
 	<div class="modal-dialog">
-		{{ Form::open(array("class" => "modal-content form-horizontal")) }}
+		{{ Form::open(array("class" => "modal-content form-horizontal", "url" => url()."/send-email-report", "method" => "post")) }}
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 class="modal-title">Send Email Report</h4>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body modal-start">
 
 				<div class="form-group">
 					<label class="control-label col-sm-3">Report Type</label>
 					
 					<div class="col-sm-8">
-						<select class="form-control">
-							<option>Hours Total Only</option>
-							<option>Full Breakdown</option>
+						<select class="form-control" name="report-type">
+							<option value="hrs only">Hours Total Only</option>
+							<!--<option value="full">Full Breakdown</option>-->
 						</select>
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label class="control-label col-sm-3">Email To:</label>
-					
-					<div class="col-sm-8">
-						<input type="text" value="" class="form-control">
-					</div>
+				<label class="control-label col-sm-3">From </label>
+				<div class='input-group date date-field-align-fix  '>
+					<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(2)}}" name="from-date" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
 				</div>
 
-				<div class="form-group">
-					<label class="control-label col-sm-3">Email From</label>
-					
-					<div class="col-sm-8">
-						<input type="text" value="chad@chadtiffin.com" class="form-control">
-					</div>
+				<label class="control-label col-sm-3">To </label>
+				<div class='input-group date date-field-align-fix '>
+					<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(3)}}" name="to-date" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
 				</div>
 
-				<div class="form-group">
-					<label class="control-label col-sm-3">Email Subject</label>
-					
-					<div class="col-sm-8">
-						<input type="text" value="Hours Report" class="form-control">
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="control-label col-sm-3">Message</label>
-					
-					<div class="col-sm-8">
-						<textarea class="form-control"></textarea>
-					</div>
-				</div>
-				
 			</div>
-			<div class="modal-footer">
+			<div class="modal-body modal-loading">
+				<img src="{{url()}}/images/ajax-loader.png" class="ajax-loader">
+				<p class="bg-info">Sending email... (this may take a few seconds)</p>
+			</div>
+			<div class="modal-body modal-success">
+				<p class='bg-success' >Email Sent</p>
+			</div>
+			<div class="modal-footer modal-start">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				<button type="submit" class="btn btn-primary" id="save-edit">Send</button>
+			</div>
+			<div class="modal-footer modal-success">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
 			</div>
 		{{ Form::close() }}
 	</div>
@@ -309,7 +305,27 @@
 		});
 
 		$("#send-email-report").click(function(){
+			//make sure modal form is reset
+			$("#email-report .modal-start").show();
+			$("#email-report .modal-success, #email-report .modal-close").hide();
 			$("#email-report").modal("show");
+		});
+
+		$("#email-report form").submit(function(e){
+			e.preventDefault();
+
+			var action = BASE_URL + "/send-email-report";
+			var form_data = $(this).serialize();
+
+			$('#email-report .modal-start').hide();
+			$('#email-report .modal-loading').show();
+
+			$.post(action,form_data,function(){
+				//$("#email-report .modal-body").hide().html("").fadeIn(500);
+
+				$('#email-report .modal-loading').hide();
+				$("#email-report .modal-success, #email-report .modal-close").fadeIn(500);
+			});
 		});
 		
 	});

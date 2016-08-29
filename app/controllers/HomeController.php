@@ -110,25 +110,14 @@ class HomeController extends BaseController {
 	public function showLogs($dateStart = "2000-01-01", $dateEnd = "2100-01-01", $minShift = 0, $maxShift = 9999)
 	{
 
-		$q = "SELECT id, clocked_in, clocked_out, ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out)) as shift_total FROM time_logs WHERE
-				DATE(clocked_in) >= ? AND
-				DATE(clocked_in) <= ? AND
-				(ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 > ? AND
-				ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 < ?)
-				ORDER BY clocked_in ASC";
-
-		$logs = DB::select($q,array($dateStart,$dateEnd,$minShift,$maxShift));
-
-		$query_total = 0;
-		foreach ($logs as $log) {
-			$query_total += $log->shift_total;
-		}
+		$timeLogObj = new TimeLog();
+		$result = $timeLogObj->getFilteredLogs($dateStart,$dateEnd,$minShift,$maxShift);
 
 		$data['header_data'] = $this->compileHeaderData();
 
-		$data['logs'] = $logs;
+		$data['logs'] = $result['results'];
 
-		$data['query_total'] = round($query_total/60,2);
+		$data['query_total'] = round($result['total']/60,2);
 
 		return View::make('pages.log_list',$data);
 	}
@@ -212,6 +201,39 @@ class HomeController extends BaseController {
 
 		$log = TimeLog::find($log_id);
 		$log->delete();
+	}
+
+	public function sendEmailReport()
+	{
+		$fields = Input::all();
+
+		file_put_contents("test.txt", json_encode($fields));
+
+		$timeLogObj = new TimeLog();
+		$result = $timeLogObj->getFilteredLogs($fields['from-date'],$fields['to-date'],0,9999);
+
+		$total_hrs = $result['total'];
+
+		$date_range_text = date("F j",strtotime($fields['from-date']))." to ".date("F j",strtotime($fields['to-date']));
+
+		$body = "<p>Hi,</p>  
+			<p>My total hours from $date_range_text is ".round($total_hrs/60,1)." hrs.</p>
+			<p>Cheers,</p>
+			<p>Chad Tiffin</p>";
+
+		if ($fields['report-type'] == "hrs only") {
+			
+		}
+		elseif ($fields['report-type'] == "full") {
+
+		}
+
+		Mail::send("emails.plaintext",array("msg" => $body),function($message){
+			$message->to("chad@chadtiffin.com")
+				->from("chad@chadtiffin.com")
+				->subject("Hours from $date_range_text");
+		});		
+
 	}
 
 /////////////////////////////
