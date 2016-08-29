@@ -231,7 +231,7 @@ class HomeController extends BaseController {
 		Mail::send("emails.plaintext",array("msg" => $body),function($message){
 			$message->to("chad@chadtiffin.com")
 				->from("chad@chadtiffin.com")
-				->subject("Hours from $date_range_text");
+				->subject("Hours for Chad");
 		});		
 
 	}
