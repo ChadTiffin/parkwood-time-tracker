@@ -312,7 +312,7 @@
 		});
 
 		$("#email-report form").submit(function(e){
-			/*e.preventDefault();
+			e.preventDefault();
 
 			var action = BASE_URL + "/send-email-report";
 			var form_data = $(this).serialize();
@@ -325,7 +325,7 @@
 
 				$('#email-report .modal-loading').hide();
 				$("#email-report .modal-success, #email-report .modal-close").fadeIn(500);
-			});*/
+			});
 		});
 		
 	});
