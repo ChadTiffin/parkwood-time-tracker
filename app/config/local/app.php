@@ -14,5 +14,5 @@ return array(
 	*/
 
 	'debug' => true,
-	"timezone" = "America/Toronto"
+	"timezone" => "America/Toronto"
 );

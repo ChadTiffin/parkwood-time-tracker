@@ -120,5 +120,4 @@ return array(
 	*/
 
 	'pretend' => false,
-
 );
