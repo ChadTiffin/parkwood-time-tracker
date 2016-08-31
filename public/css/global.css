@@ -4,7 +4,7 @@ header {
 }
 
 header .logo {
-	width: 400px;
+	width: 200px;
 	margin: 10px;
 }
 
@@ -14,6 +14,10 @@ header .title {
 	vertical-align: middle;
 	margin: 10px;
 	margin-left: 20px;
+}
+
+header .title .greeting {
+	font-size: 12pt;
 }
 
 header form {
@@ -37,9 +41,20 @@ header .clock-status {
 .main {
 	margin: 30px;
 	margin-top: 100px;
-	max-width: 1000px;
+	max-width: 1200px;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.login form {
+	max-width: 500px;
+	margin: auto;
+}
+
+.wrapper {
+	max-width: 1200px;
+	margin: auto;
+	position: relative;
 }
 
 .btn-xs img {

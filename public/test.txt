@@ -1,1 +1,9 @@
-{"_token":"CGf8CaR7H1UsmZ4yD80y5VjJQ8mURjFTC5crK20m","report-type":"hrs only","from-date":"2016-08-01","to-date":"2016-08-23"}
+SELECT time_logs.id as id, first_name, last_name, clocked_in, clocked_out, ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out)) as shift_total FROM time_logs
+		RIGHT JOIN users ON users.id=time_logs.user_id 
+		WHERE
+			
+			DATE(clocked_in) >= ? AND
+			DATE(clocked_in) <= ? AND
+			(ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 > ? AND
+			ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 < ?)
+			ORDER BY clocked_in ASC

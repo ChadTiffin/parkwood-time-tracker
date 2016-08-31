@@ -19,10 +19,28 @@ class HomeController extends BaseController {
 // 'VIEW' LOADERS
 ///////////////////
 
+	public function showLogin()
+	{
+
+		$data['header_data'] = $this->compileHeaderData();
+
+		return View::make('login',$data);
+	}
+
+	public function logout()
+	{
+		Auth::logout();
+
+		$data['header_data'] = $this->compileHeaderData();
+		return View::make('login',$data);
+	}
+
 	public function showSummary()
 	{
 
-		$q_base = "SELECT SUM(ABS(TIMESTAMPDIFF(MINUTE, clocked_out, clocked_in))) as sum FROM time_logs WHERE ";
+		$logged_in_user_id = Auth::user()->id;
+
+		$q_base = "SELECT SUM(ABS(TIMESTAMPDIFF(MINUTE, clocked_out, clocked_in))) as sum FROM time_logs WHERE user_id='$logged_in_user_id' AND ";
 
 		/////////////////////////////
 		// SUMMARY FOR THIS WEEK
@@ -96,7 +114,7 @@ class HomeController extends BaseController {
 		// TODAY'S LOGS
 		/////////////////////////////
 
-		$q = "SELECT clocked_in, clocked_out, ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out)) as shift_total FROM time_logs WHERE DATE(NOW()) = DATE(clocked_in)";
+		$q = "SELECT clocked_in, clocked_out, ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out)) as shift_total FROM time_logs WHERE DATE(NOW()) = DATE(clocked_in) AND user_id='$logged_in_user_id'";
 		$todays_logs = DB::select($q);
 
 		$data['today_logs'] = $todays_logs;
@@ -107,15 +125,15 @@ class HomeController extends BaseController {
 		return View::make('pages.summary',$data);
 	}
 
-	public function showLogs($dateStart = "2000-01-01", $dateEnd = "2100-01-01", $minShift = 0, $maxShift = 9999)
+	public function showLogs($userId, $dateStart = "2000-01-01", $dateEnd = "2100-01-01", $minShift = 0, $maxShift = 9999)
 	{
 
-		$timeLogObj = new TimeLog();
-		$result = $timeLogObj->getFilteredLogs($dateStart,$dateEnd,$minShift,$maxShift);
+		$result = TimeLog::getFilteredLogs($userId, $dateStart,$dateEnd,$minShift,$maxShift);
 
 		$data['header_data'] = $this->compileHeaderData();
 
 		$data['logs'] = $result['results'];
+		$data['users'] = User::all();
 
 		$data['query_total'] = round($result['total']/60,2);
 
@@ -139,6 +157,7 @@ class HomeController extends BaseController {
 
 			$time_log = new TimeLog;
 			$time_log->clocked_in = $current_time;
+			$time_log->user_id = Auth::user()->id;
 
 			$time_log->save();
 
@@ -207,8 +226,6 @@ class HomeController extends BaseController {
 	{
 		$fields = Input::all();
 
-		file_put_contents("test.txt", json_encode($fields));
-
 		$timeLogObj = new TimeLog();
 		$result = $timeLogObj->getFilteredLogs($fields['from-date'],$fields['to-date'],0,9999);
 
@@ -229,57 +246,28 @@ class HomeController extends BaseController {
 		}
 
 		Mail::send("emails.plaintext",array("msg" => $body),function($message){
-			$message->to("chad@chadtiffin.com")
+
+			$payroll_email_setting = Setting::getSetting("payroll_email");
+			$email_subject = Setting::getSetting("email_report_subject");
+
+			$message->to($payroll_email_setting->value)
 				->from("chad@chadtiffin.com")
-				->subject("Hours for Chad");
+				->subject($email_subject->value);
 		});		
 
 	}
 
-/////////////////////////////
-// PRIVATE FUNCTIONS
-////////////////////////////
-
-	/**
-	 * Checks if user is clocked in or not. If clocked in, return clock-in time, else return false
-	 *
-	 * @return datetime/boolean
-	 */
-	private function clockedInTime()
+	public function processLogin()
 	{
-		$open_logs = TimeLog::where("clocked_out","=", null)->take(1)->get();
+		$email = Input::get("email");
+		$password = Input::get("password");
 
-		if (count($open_logs) != 0) {
-			return $open_logs[0]->clocked_in;
+		if (Auth::attempt(array('email' => $email, "password" => $password))) {
+			return "true";
 		}
 		else {
-			return false;
+			return "false";
 		}
-	}
-
-	/**
-	* Set all data common to all views
-	* @return array
-	*
-	*
-	*/
-	private function compileHeaderData()
-	{
-		$clock_time = $this->clockedInTime();
-
-		if (!$clock_time) {
-			$data['clock_direction'] = "IN";
-			$data['status'] = "Clocked out.";
-			$data['clock_btn_type'] = "btn-success";
-		}
-		else {
-			
-			$data['clock_direction'] = "OUT";
-			$data['status'] = "Clocked in at ".date("h:i A",strtotime($clock_time));
-			$data['clock_btn_type'] = "btn-warning";
-		}
-
-		return $data;
 	}
 
 }

@@ -10,16 +10,26 @@ class TimeLog extends Eloquent {
 	*
 	*
 	*/
-	public function getFilteredLogs($dateStart,$dateEnd,$minShift,$maxShift)
+	public static function getFilteredLogs($userId, $dateStart,$dateEnd,$minShift,$maxShift)
 	{
-		$q = "SELECT id, clocked_in, clocked_out, ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out)) as shift_total FROM time_logs WHERE
-				DATE(clocked_in) >= ? AND
-				DATE(clocked_in) <= ? AND
-				(ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 > ? AND
-				ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 < ?)
-				ORDER BY clocked_in ASC";
+		$user_match = "";
+		if ($userId != "all") {
+			$user_match = "user_id = ? AND";
+		}
 
-		$logs = DB::select($q,array($dateStart,$dateEnd,$minShift,$maxShift));
+		$q = "SELECT time_logs.id as id, first_name, last_name, clocked_in, clocked_out, ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out)) as shift_total FROM time_logs
+		RIGHT JOIN users ON users.id=time_logs.user_id 
+		WHERE
+			$user_match
+			DATE(clocked_in) >= ? AND
+			DATE(clocked_in) <= ? AND
+			(ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 > ? AND
+			ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 < ?)
+			ORDER BY clocked_in ASC";
+
+		file_put_contents("test.txt", $q);
+
+		$logs = DB::select($q,array($userId, $dateStart,$dateEnd,$minShift,$maxShift));
 
 		$query_total = 0;
 		foreach ($logs as $log) {

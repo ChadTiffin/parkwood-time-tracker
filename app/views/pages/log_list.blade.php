@@ -10,10 +10,31 @@
 			<div>
 				{{ Form::open(array("class" => "form-horizontal", "id" => "filter-form")) }}
 					<h2>Filtering</h2>
+
+					<h3>Users</h3>
+
+					<div class="form-group">
+						
+						<label class="control-label col-sm-3">User</label>
+						<div class="col-sm-9">
+							<select class="form-control" name="user_id">
+								<option value="all">All</option>
+								@foreach ($users as $user)
+
+									<option value="{{$user->id}}"
+									@if (Request::segment(2) == $user->id) 
+										selected
+									@endif
+									>{{ $user->first_name }} {{ $user->last_name }}</option>
+
+								@endforeach
+							</select>
+						</div>
+					</div>
 			
 					<h3>Date Range</h3>
 					
-					<label class="control-label col-sm-3">From </label>
+					<label class="control-label col-sm-3">From</label>
 					<div class='input-group date'>
 						<input type='text' class="form-control" id='filter-from-date' value="{{Request::segment(2)}}"/>
 						<span class="input-group-addon">
@@ -21,8 +42,8 @@
 						</span>
 					</div>
 
-					<label class="control-label col-sm-3">To </label>
-					<div class='input-group date '>
+					<label class="control-label col-sm-3">To</label>
+					<div class='input-group date'>
 						<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(3)}}"/>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
@@ -34,12 +55,12 @@
 
 					<div class="form-group">
 						
-						<label class="control-label col-sm-4">Min (Hrs) </label>
+						<label class="control-label col-sm-4">Min (Hrs)</label>
 						<div class="col-sm-8">
 							<input type='number' min="0" step="0.1" class="form-control" id="filter-min-shift" value="{{Request::segment(4)}}"/>
 						</div>
 
-						<label class="control-label col-sm-4">Max (Hrs) </label>
+						<label class="control-label col-sm-4">Max (Hrs)</label>
 						<div class="col-sm-8">
 							<input type='number' min="0" step="0.1" class="form-control" id="filter-max-shift" value="{{Request::segment(5)}}"/>
 						</div>
@@ -69,6 +90,7 @@
 			<table class="table log-list">
 				<thead>
 					<tr>
+						<th>User</th>
 						<th>Date</th>
 						<th>Clocked In</th>
 						<th>Clocked Out</th>
@@ -86,6 +108,7 @@
 					@foreach ($logs as $log)
 						
 						<tr data-id='{{$log->id}}'>
+							<td class="user">{{{ $log->first_name }}} {{{ $log->last_name }}}</td>
 							<td class="log-date">{{{format_datetime($log->clocked_in)}}}</td>
 							<td class="clocked_in" data-datetime="{{{$log->clocked_in}}}"><?=format_datetime($log->clocked_in,"time")?></td>
 							<td style="text-align:left;" class="clocked_out" data-datetime="{{{$log->clocked_out}}}">
@@ -203,7 +226,7 @@
 				<p class="bg-info">Sending email... (this may take a few seconds)</p>
 			</div>
 			<div class="modal-body modal-success">
-				<p class='bg-success' >Email Sent</p>
+				<p class='alert alert-success' role="alert">Email Sent</p>
 			</div>
 			<div class="modal-footer modal-start">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -287,12 +310,13 @@
 		$('#filter-form').submit(function(e){
 			e.preventDefault();
 
+			var user_id = $('#filter-form select[name=user_id]').val();
 			var from_date = $("#filter-from-date").val();
 			var to_date = $("#filter-to-date").val();
 			var min_shift = $("#filter-min-shift").val();
 			var max_shift = $("#filter-max-shift").val();
 
-			window.location.href = BASE_URL + "/logs/" + from_date + "/" + to_date + "/" + min_shift + "/" + max_shift;
+			window.location.href = BASE_URL + "/logs/" + user_id + "/" + from_date + "/" + to_date + "/" + min_shift + "/" + max_shift;
 		});
 
 		$("#filter-form #clear-filter").click(function(){

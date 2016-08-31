@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTimeLogsTable extends Migration {
+class CreateUsers extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,11 +13,14 @@ class CreateTimeLogsTable extends Migration {
 	public function up()
 	{
 		//
-		Schema::create("time_logs", function (Blueprint $table) {
+		Schema::create("users", function (Blueprint $table) {
 			$table->increments("id");
-			$table->datetime("clocked_in");
-			$table->datetime("clocked_out");
+			$table->string("email");
+			$table->string("password");
+			$table->string("first_name")->nullable();
+			$table->string("last_name")->nullable();
 			$table->timestamps();
+			$table->rememberToken();
 		});
 	}
 
@@ -29,7 +32,6 @@ class CreateTimeLogsTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("time_logs");
 	}
 
 }

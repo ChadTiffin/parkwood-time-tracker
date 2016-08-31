@@ -15,4 +15,47 @@ class BaseController extends Controller {
 		}
 	}
 
+
+	/**
+	 * Checks if user is clocked in or not. If clocked in, return clock-in time, else return false
+	 *
+	 * @return datetime/boolean
+	 */
+	public function clockedInTime()
+	{
+		$open_logs = TimeLog::where("clocked_out","=", null)->take(1)->get();
+
+		if (count($open_logs) != 0) {
+			return $open_logs[0]->clocked_in;
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	* Set all data common to all views
+	* @return array
+	*
+	*
+	*/
+	public function compileHeaderData()
+	{
+		$clock_time = $this->clockedInTime();
+
+		if (!$clock_time) {
+			$data['clock_direction'] = "IN";
+			$data['status'] = "Clocked out.";
+			$data['clock_btn_type'] = "btn-success";
+		}
+		else {
+			
+			$data['clock_direction'] = "OUT";
+			$data['status'] = "Clocked in at ".date("h:i A",strtotime($clock_time));
+			$data['clock_btn_type'] = "btn-warning";
+		}
+
+		return $data;
+	}
+
 }

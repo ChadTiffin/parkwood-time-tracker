@@ -11,17 +11,32 @@
 |
 */
 
+//////////////
+//PAGES
+//////////////
 
+Route::get("/login/{status?}","HomeController@showLogin");
+Route::get("/logout/{status?}","HomeController@logout");
 
-Route::get('/', 'HomeController@showSummary');
+Route::group(array("before" => "auth"), function(){
+	Route::get('/', 'HomeController@showSummary');
 
-Route::get('logs/{dateStart?}/{dateEnd?}/{minShift?}/{maxShift?}', 'HomeController@showLogs');
+	Route::get('logs/{userId?}/{dateStart?}/{dateEnd?}/{minShift?}/{maxShift?}', 'HomeController@showLogs');
+	Route::get('settings', 'SettingsController@showSettings');
 
-Route::post("punch-clock",'HomeController@punchClock');
+	///////////////
+	// REQUESTS
+	///////////////
 
-Route::post("edit","HomeController@editLog");
-Route::post("delete-log","HomeController@deleteLog");
+	Route::post("punch-clock", 'HomeController@punchClock');
+	Route::post("edit", "HomeController@editLog");
+	Route::post("delete-log", "HomeController@deleteLog");
 
-Route::get("blade-test","HomeController@bladeTest");
+	Route::post("send-email-report", "HomeController@sendEmailReport");
 
-Route::any("send-email-report","HomeController@sendEmailReport");
+	Route::post("settings/save-settings", "SettingsController@saveSettings");
+	Route::post("settings/change-password", "SettingsController@changePassword");
+
+});
+
+Route::post("/login/process","HomeController@processLogin");
