@@ -49,7 +49,6 @@
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
 					</div>
-					
 
 					<h3>Shift Length</h3>
 
@@ -211,7 +210,7 @@
 
 				<label class="control-label col-sm-3">From </label>
 				<div class='input-group date date-field-align-fix  '>
-					<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(2)}}" name="from-date" />
+					<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(3)}}" name="from-date" />
 					<span class="input-group-addon">
 						<span class="glyphicon glyphicon-calendar"></span>
 					</span>
@@ -219,7 +218,7 @@
 
 				<label class="control-label col-sm-3">To </label>
 				<div class='input-group date date-field-align-fix '>
-					<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(3)}}" name="to-date" />
+					<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(4)}}" name="to-date" />
 					<span class="input-group-addon">
 						<span class="glyphicon glyphicon-calendar"></span>
 					</span>

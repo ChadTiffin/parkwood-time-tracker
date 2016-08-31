@@ -8,13 +8,13 @@
 	<div class="row">
 		<div class='col-sm-6'>
 
-			<h2>Hours Banked</h2>
+			<!--<h2>Hours Banked</h2>
 			<table class="table">
 				<tr>
 					<th>Total Banked</th>
 					<td>12.1</td>
 				</tr>
-			</table>
+			</table>-->
 
 			<h2>This Week</h2>
 			<table class="table">
