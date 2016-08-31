@@ -23,6 +23,7 @@ Route::group(array("before" => "auth"), function(){
 
 	Route::get('logs/{userId?}/{dateStart?}/{dateEnd?}/{minShift?}/{maxShift?}', 'HomeController@showLogs');
 	Route::get('settings', 'SettingsController@showSettings');
+	Route::get('users', 'UsersController@showUsers');
 
 	///////////////
 	// REQUESTS
@@ -36,6 +37,8 @@ Route::group(array("before" => "auth"), function(){
 
 	Route::post("settings/save-settings", "SettingsController@saveSettings");
 	Route::post("settings/change-password", "SettingsController@changePassword");
+
+	Route::post("users/edit", "UsersController@editUser");
 
 });
 

@@ -8,6 +8,89 @@
 	<div class="row">
 		<div class='col-sm-6'>
 
+			<h2>Hours Banked</h2>
+			<table class="table">
+				<tr>
+					<th>Total Banked</th>
+					<td>12.1</td>
+				</tr>
+			</table>
+
+			<h2>This Week</h2>
+			<table class="table">
+				<tr>
+					<th>Sunday</th>
+					<td>{{{$daily_totals[7]}}}</td>
+				</tr>
+				<tr>
+					<th>Monday</th>
+					<td>{{{$daily_totals[8]}}}</td>
+				</tr>
+				<tr>
+					<th>Tuesday</th>
+					<td>{{{$daily_totals[9]}}}</td>
+				</tr>
+				<tr>
+					<th>Wednesday</th>
+					<td>{{{$daily_totals[10]}}}</td>
+				</tr>
+				<tr>
+					<th>Thursday</th>
+					<td>{{{$daily_totals[11]}}}</td>
+				</tr>
+				<tr>
+					<th>Friday</th>
+					<td>{{{$daily_totals[12]}}}</td>
+				</tr>
+				<tr>
+					<th>Saturday</th>
+					<td>{{{$daily_totals[13]}}}</td>
+				</tr>
+				<tr>
+					<th>Total This Week</th>
+					<td><strong>{{{$this_week_total}}} hrs</strong></td>
+				</tr>
+			</table>
+
+			<h2>Last Week</h2>
+			<table class="table">
+				<tr>
+					<th>Sunday</th>
+					<td>{{{$daily_totals[0]}}}</td>
+				</tr>
+				<tr>
+					<th>Monday</th>
+					<td>{{{$daily_totals[1]}}}</td>
+				</tr>
+				<tr>
+					<th>Tuesday</th>
+					<td>{{{$daily_totals[2]}}}</td>
+				</tr>
+				<tr>
+					<th>Wednesday</th>
+					<td>{{{$daily_totals[3]}}}</td>
+				</tr>
+				<tr>
+					<th>Thursday</th>
+					<td>{{{$daily_totals[4]}}}</td>
+				</tr>
+				<tr>
+					<th>Friday</th>
+					<td>{{{$daily_totals[5]}}}</td>
+				</tr>
+				<tr>
+					<th>Saturday</th>
+					<td>{{{$daily_totals[6]}}}</td>
+				</tr>
+				<tr>
+					<th>Total Last Week</th>
+					<td><strong>{{{$last_week_total}}} hrs</strong></td>
+				</tr>
+			</table>
+		</div>
+
+		<div class='col-sm-6'>
+
 			<h2>Today's Logs</h2>
 			<table class="table">
 				<tr>
@@ -44,44 +127,6 @@
 				
 			</table>
 
-			<h2>This Week</h2>
-			<table class="table">
-				<tr>
-					<th>Sunday</th>
-					<td>{{{$daily_totals[0]}}}</td>
-				</tr>
-				<tr>
-					<th>Monday</th>
-					<td>{{{$daily_totals[1]}}}</td>
-				</tr>
-				<tr>
-					<th>Tuesday</th>
-					<td>{{{$daily_totals[2]}}}</td>
-				</tr>
-				<tr>
-					<th>Wednesday</th>
-					<td>{{{$daily_totals[3]}}}</td>
-				</tr>
-				<tr>
-					<th>Thursday</th>
-					<td>{{{$daily_totals[4]}}}</td>
-				</tr>
-				<tr>
-					<th>Friday</th>
-					<td>{{{$daily_totals[5]}}}</td>
-				</tr>
-				<tr>
-					<th>Saturday</th>
-					<td>{{{$daily_totals[6]}}}</td>
-				</tr>
-				<tr>
-					<th>Total This Week</th>
-					<td><strong>{{{$weekly_total}}}</strong></td>
-				</tr>
-			</table>
-		</div>
-
-		<div class='col-sm-6'>
 			<h2>This Year</h2>
 			<table class="table">
 				<tr>

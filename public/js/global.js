@@ -23,4 +23,8 @@ $(document).ready(function(){
 		showTodayButton : true,
 		format : "YYYY-MM-DD"
 	});
+
+	$('.mobile-menu').click(function(){
+		$('.navbar-nav').toggle();
+	});
 });

@@ -13,7 +13,9 @@
 				</div>
 			</div>
 
-			<ul class="nav navbar-nav pull-right">
+			<span class="glyphicon glyphicon-menu-hamburger mobile-menu pull-right" aria-hidden="true"></span>
+
+			<div class=" pull-right">
 				
 				@if (Auth::check())
 
@@ -23,15 +25,19 @@
 
 				{{ Form::close() }}
 
-				<li><a href="{{url()}}/">Summary</a></li>
-				<li><a href="{{url()}}/logs/{{ Auth::user()->id }}/{{date('Y')}}-01-01/{{date('Y-m-d')}}">Logs</a></li>
-				<li><a href="{{url()}}/settings">Settings</a></li>
-				<li><a href="{{url()}}/logout">Logout</a></li>
+				<ul class="nav navbar-nav">
+					<li><a href="{{ action('HomeController@showSummary') }}/">Summary</a></li>
+					<li><a href="{{ action('HomeController@showLogs') }}/{{ Auth::user()->id }}/{{date('Y')}}-01-01/{{date('Y-m-d')}}">Logs</a></li>
+					<li><a href="{{ action('SettingsController@showSettings') }}">Settings</a></li>
+					<li><a href="{{ action('UsersController@showUsers') }}">Users</a></li>
+					<li><a href="{{ action('HomeController@logout') }}">Logout</a></li>
+				</ul>
 				@endif
 			</ul>
 			@if (Auth::check())
 			<p class="clock-status">{{$header_data['status']}}</p>
 			@endif
+
 		</div>
 	</nav>
 

@@ -12,9 +12,12 @@ class TimeLog extends Eloquent {
 	*/
 	public static function getFilteredLogs($userId, $dateStart,$dateEnd,$minShift,$maxShift)
 	{
-		$user_match = "";
+		$user_match = "user_id != ? AND";
 		if ($userId != "all") {
 			$user_match = "user_id = ? AND";
+		}
+		else {
+			$userId = 0;
 		}
 
 		$q = "SELECT time_logs.id as id, first_name, last_name, clocked_in, clocked_out, ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out)) as shift_total FROM time_logs

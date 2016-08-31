@@ -47,13 +47,14 @@ class HomeController extends BaseController {
 		////////////////////////////////
 
 		//find total hours for each day of week
-		$last_sunday = date("Y-m-d",strtotime('last sunday'));
+		$last_sunday = date("Y-m-d",strtotime('-2 weeks sunday'));
 
-		//loop through next 7 days and totalize times for each day
+		//loop through next 14 days and totalize times for each day
 		$daily_totals = array();
-		$weekly_total = 0;
+		$this_week_total = 0;
+		$last_week_total = 0;
 
-		for ($i=0; $i < 7; $i++) { 
+		for ($i=0; $i < 14; $i++) { 
 			$current_iterated_day = new DateTime($last_sunday);
 			$current_iterated_day->add(new DateInterval("P".$i."D"));
 
@@ -61,6 +62,13 @@ class HomeController extends BaseController {
 			$days_logs = DB::select($q,array($current_iterated_day->format("Y-m-d")));
 
 			$daily_total = round($days_logs[0]->sum/60,1);
+
+			if ($i <= 6) {
+				$last_week_total += $daily_total;
+			}
+			else {
+				$this_week_total += $daily_total;
+			}
 
 			if ($daily_total == 0) {
 				$daily_total = "-";
@@ -70,13 +78,12 @@ class HomeController extends BaseController {
 			}
 
 			$daily_totals[] = $daily_total;
-			$weekly_total += $daily_total;
+
 		}
 
-		$last_week_total = 0;
-
 		$data['daily_totals'] = $daily_totals;
-		$data['weekly_total'] = $weekly_total;
+		$data['last_week_total'] = $last_week_total;
+		$data['this_week_total'] = $this_week_total;
 
 		/////////////////////////////
 		// MONTHLY SUMMARY

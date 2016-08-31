@@ -36,7 +36,7 @@
 					
 					<label class="control-label col-sm-3">From</label>
 					<div class='input-group date'>
-						<input type='text' class="form-control" id='filter-from-date' value="{{Request::segment(2)}}"/>
+						<input type='text' class="form-control" id='filter-from-date' value="{{Request::segment(3)}}"/>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
@@ -44,7 +44,7 @@
 
 					<label class="control-label col-sm-3">To</label>
 					<div class='input-group date'>
-						<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(3)}}"/>
+						<input type='text' class="form-control" id='filter-to-date' value="{{Request::segment(4)}}"/>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
@@ -57,12 +57,12 @@
 						
 						<label class="control-label col-sm-4">Min (Hrs)</label>
 						<div class="col-sm-8">
-							<input type='number' min="0" step="0.1" class="form-control" id="filter-min-shift" value="{{Request::segment(4)}}"/>
+							<input type='number' min="0" step="0.1" class="form-control" id="filter-min-shift" value="{{Request::segment(5)}}"/>
 						</div>
 
 						<label class="control-label col-sm-4">Max (Hrs)</label>
 						<div class="col-sm-8">
-							<input type='number' min="0" step="0.1" class="form-control" id="filter-max-shift" value="{{Request::segment(5)}}"/>
+							<input type='number' min="0" step="0.1" class="form-control" id="filter-max-shift" value="{{Request::segment(6)}}"/>
 						</div>
 						
 					</div>
@@ -87,65 +87,67 @@
 		<div class='col-sm-8'>
 			<h2>Logs</h2>
 
-			<table class="table log-list">
-				<thead>
-					<tr>
-						<th>User</th>
-						<th>Date</th>
-						<th>Clocked In</th>
-						<th>Clocked Out</th>
-						<th style="width:150px;text-align:right;">Total Time (hrs)</th>
-						<th style="width:120px;">Edit/Delete</th>
-					</tr>
-				</thead>
-				<tbody>
-				@if (count($logs) == 0)
-
-					<tr>
-						<td colspan="5">No entries found.</td>
-					</tr>
-				@else
-					@foreach ($logs as $log)
-						
-						<tr data-id='{{$log->id}}'>
-							<td class="user">{{{ $log->first_name }}} {{{ $log->last_name }}}</td>
-							<td class="log-date">{{{format_datetime($log->clocked_in)}}}</td>
-							<td class="clocked_in" data-datetime="{{{$log->clocked_in}}}"><?=format_datetime($log->clocked_in,"time")?></td>
-							<td style="text-align:left;" class="clocked_out" data-datetime="{{{$log->clocked_out}}}">
-								<?php
-								if ($log->clocked_out == null) {
-									echo "[in progress]";
-								}
-								else {
-									echo format_datetime($log->clocked_out,"time");
-								} ?>
-							</td>
-							<td style="text-align:right;" class="total">
-								<?php
-								if ($log->clocked_out == null) {
-									echo "...";
-								}
-								else {
-									echo abs(round($log->shift_total/60,2));
-								} ?>
-							</td>
-							<td class='edit-controls' data-id='<?=$log->id?>'>
-								<button class="btn btn-warning btn-xs edit"><img src="{{url()}}/images/edit-icon.png"></button>
-								<button class='btn btn-danger btn-sm delete'>- Del</button>
-							</td>
+			<div class="overflow-x">
+				<table class="table log-list">
+					<thead>
+						<tr>
+							<th>User</th>
+							<th>Date</th>
+							<th>Clocked In</th>
+							<th>Clocked Out</th>
+							<th style="width:150px;text-align:right;">Total Time (hrs)</th>
+							<th style="width:120px;">Edit/Delete</th>
 						</tr>
+					</thead>
+					<tbody>
+					@if (count($logs) == 0)
 
-					@endforeach
-				@endif
-				</tbody>
-				<tfoot>
-					<tr>
-						<th colspan="3" style="text-align:right;">Total</th>
-						<td style="text-align:right;"><strong><?=$query_total?></strong></td>
-						<td colspan="2"></td>
-					</tr>
-				</tfoot>
-			</table>
+						<tr>
+							<td colspan="5">No entries found.</td>
+						</tr>
+					@else
+						@foreach ($logs as $log)
+							
+							<tr data-id='{{$log->id}}'>
+								<td class="user">{{{ $log->first_name }}} {{{ $log->last_name }}}</td>
+								<td class="log-date">{{{format_datetime($log->clocked_in)}}}</td>
+								<td class="clocked_in" data-datetime="{{{$log->clocked_in}}}"><?=format_datetime($log->clocked_in,"time")?></td>
+								<td style="text-align:left;" class="clocked_out" data-datetime="{{{$log->clocked_out}}}">
+									<?php
+									if ($log->clocked_out == null) {
+										echo "[in progress]";
+									}
+									else {
+										echo format_datetime($log->clocked_out,"time");
+									} ?>
+								</td>
+								<td style="text-align:right;" class="total">
+									<?php
+									if ($log->clocked_out == null) {
+										echo "...";
+									}
+									else {
+										echo abs(round($log->shift_total/60,2));
+									} ?>
+								</td>
+								<td class='edit-controls' data-id='{{$log->id}}'>
+									<button class="btn btn-warning btn-xs edit"><img src="{{url()}}/images/edit-icon.png"></button>
+									<button class='btn btn-danger btn-sm delete'>- Del</button>
+								</td>
+							</tr>
+
+						@endforeach
+					@endif
+					</tbody>
+					<tfoot>
+						<tr>
+							<th colspan="3" style="text-align:right;">Total</th>
+							<td style="text-align:right;"><strong><?=$query_total?></strong></td>
+							<td colspan="2"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
 
 		</div>
 
@@ -153,22 +155,25 @@
 <!-- Edit Log Modal -->
 <div id="edit-log" class="modal fade">
 	<div class="modal-dialog">
-		{{ Form::open(array("class" => "modal-content")) }}
+		{{ Form::open(array("class" => "modal-content form-horizontal")) }}
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 class="modal-title">Edit Log</h4>
 			</div>
 			<div class="modal-body">
 
-				<label class="control-label col-sm-3">Clocked In </label>
-				<p class="col-sm-9">
-				<input type='text' class="form-control" id='edit-clocked-in' name="edit-clocked-in">
-				</p>
-
-				<label class="control-label col-sm-3">Clocked Out </label>
-				<p class="col-sm-9">
-				<input type='text' class="form-control" id='edit-clocked-out' name="edit-clocked-out">
-				</p>
+				<div class="form-group">
+					<label class="control-label col-sm-3">Clocked In </label>
+					<div class="col-sm-9">
+						<input type='text' class="form-control" id='edit-clocked-in' name="edit-clocked-in">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-3">Clocked Out </label>
+					<div class="col-sm-9">
+						<input type='text' class="form-control" id='edit-clocked-out' name="edit-clocked-out">
+					</div>
+				</div>
 
 				<input type="hidden" name="id" value="">
 
