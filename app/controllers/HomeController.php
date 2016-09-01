@@ -29,9 +29,9 @@ class HomeController extends BaseController {
 
 	public function logout()
 	{
-		Auth::logout();
-
+		
 		$data['header_data'] = $this->compileHeaderData();
+		Auth::logout();
 		return View::make('login',$data);
 	}
 
@@ -156,6 +156,7 @@ class HomeController extends BaseController {
 
 		//check if there is an open log
 		$time_log = $this->clockedInTime();
+		$user_id = Auth::user()->id;
 
 		$current_time = date("Y-m-d H:i:s");
 
@@ -164,7 +165,7 @@ class HomeController extends BaseController {
 
 			$time_log = new TimeLog;
 			$time_log->clocked_in = $current_time;
-			$time_log->user_id = Auth::user()->id;
+			$time_log->user_id = $user_id;
 
 			$time_log->save();
 
@@ -173,7 +174,7 @@ class HomeController extends BaseController {
 		else {
 			//Punch user out
 
-			$time_log = TimeLog::where("clocked_out","=", null)->take(1)->get();
+			$time_log = TimeLog::where("clocked_out","=", null)->where("user_id","=",$user_id)->take(1)->get();
 			$id = $time_log[0]->id;
 
 			$time_log = TimeLog::find($id);
