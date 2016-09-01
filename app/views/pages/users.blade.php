@@ -35,8 +35,10 @@
 				<!--<button class='btn btn-danger btn-sm delete'>- Del</button>-->
 			</td>
 		</tr>
-		</tbody>
+		
 	@endforeach
+	
+		</tbody>
 
 	</table>
 
