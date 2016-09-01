@@ -1,5 +1,3 @@
 <?php
 
-class SettingValue extends Eloquent {
-	
-}
+class SettingValue extends Eloquent {}

@@ -235,7 +235,7 @@ class HomeController extends BaseController {
 		$fields = Input::all();
 
 		$timeLogObj = new TimeLog();
-		$result = $timeLogObj->getFilteredLogs($fields['from-date'],$fields['to-date'],0,9999);
+		$result = $timeLogObj->getFilteredLogs(Auth::user()->id,$fields['from-date'],$fields['to-date'],0,9999);
 
 		$total_hrs = $result['total'];
 
@@ -244,7 +244,7 @@ class HomeController extends BaseController {
 		$body = "<p>Hi,</p>  
 			<p>My total hours from $date_range_text is ".round($total_hrs/60,1)." hrs.</p>
 			<p>Cheers,</p>
-			<p>Chad Tiffin</p>";
+			<p>".Auth::user()->first_name."</p>";
 
 		if ($fields['report-type'] == "hrs only") {
 			
@@ -256,10 +256,10 @@ class HomeController extends BaseController {
 		Mail::send("emails.plaintext",array("msg" => $body),function($message){
 
 			$payroll_email_setting = Setting::getSetting("payroll_email");
-			$email_subject = Setting::getSetting("email_report_subject");
+			$email_subject = Setting::getSetting("report_subject");
 
 			$message->to($payroll_email_setting->value)
-				->from("chad@chadtiffin.com")
+				->from(Auth::user()->email)
 				->subject($email_subject->value);
 		});		
 

@@ -52,6 +52,26 @@ class UsersController extends BaseController {
 		$user->email = $input['edit-email'];
 
 		$user->save();
+
+		//create user settings records if new user
+		if ($input['id'] == "") {
+			$setting = new SettingValue;
+
+			$setting->value = "";
+			$setting->setting_id = "1";
+			$setting->user_id = $user->id;
+
+			$setting->save();
+
+			$setting = new SettingValue;
+
+			$setting->value = "";
+			$setting->setting_id = "2";
+			$setting->user_id = $user->id;
+
+			$setting->save();
+		}
+
 		return $edit_type;
 	}
 

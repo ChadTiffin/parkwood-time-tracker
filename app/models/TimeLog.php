@@ -30,8 +30,6 @@ class TimeLog extends Eloquent {
 			ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 <= ?)
 			ORDER BY clocked_in ASC";
 
-		file_put_contents("test.txt", $q);
-
 		$logs = DB::select($q,array($userId, $dateStart,$dateEnd,$minShift,$maxShift));
 
 		$query_total = 0;
