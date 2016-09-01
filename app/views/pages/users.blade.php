@@ -14,6 +14,7 @@
 			<th>Id</th>
 			<th>Name</th>
 			<th>Email</th>
+			<th>Status</th>
 			<th style="width:120px;">Edit</th>
 		</tr>
 		</thead>
@@ -30,6 +31,7 @@
 			<td>{{ $user->id }}</td>
 			<td class="name">{{ $user->first_name }} {{ $user->last_name }}</td>
 			<td class="email">{{ $user->email }}</td>
+			<td class="status">{{ $user->status }}</td>
 			<td class='edit-controls' data-id='{{$user->id}}'>
 				<button class="btn btn-warning btn-xs edit"><img src="{{url()}}/images/edit-icon.png"></button>
 				<!--<button class='btn btn-danger btn-sm delete'>- Del</button>-->
@@ -37,7 +39,7 @@
 		</tr>
 		
 	@endforeach
-	
+
 		</tbody>
 
 	</table>

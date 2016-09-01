@@ -22,7 +22,25 @@ class UsersController extends BaseController {
 	public function showUsers()
 	{
 
-		$data['users'] = User::all();
+		$users = User::all();
+
+		$new_users = [];
+		foreach ($users as $user) {
+			$open_logs = TimeLog::where("clocked_out","=", null)->where("user_id","=",$user->id)->take(1)->get();
+
+			if (count($open_logs) != 0) {
+				$status = "<div class='text-success'>Clocked in at ". $open_logs[0]->clocked_in."</div>";
+			}
+			else {
+				$status = "<span class='text-warning'>Clocked Out</span>";
+			}
+
+			$user['status'] = $status;
+
+			$new_users[] = $user;
+		}
+
+		$data['users'] = json_decode(json_encode($new_users));
 
 		$data['header_data'] = $this->compileHeaderData();
 

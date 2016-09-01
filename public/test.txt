@@ -1,9 +1,1 @@
-SELECT time_logs.id as id, first_name, last_name, clocked_in, clocked_out, ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out)) as shift_total FROM time_logs
-		RIGHT JOIN users ON users.id=time_logs.user_id 
-		WHERE
-			user_id = ? AND
-			DATE(clocked_in) >= ? AND
-			DATE(clocked_in) <= ? AND
-			(ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 > ? AND
-			ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 < ?)
-			ORDER BY clocked_in ASC
+ObjectObjectObjectObject
