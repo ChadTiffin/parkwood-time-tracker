@@ -26,8 +26,8 @@ class TimeLog extends Eloquent {
 			$user_match
 			DATE(clocked_in) >= ? AND
 			DATE(clocked_in) <= ? AND
-			(ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 > ? AND
-			ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 < ?)
+			(ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 >= ? AND
+			ABS(TIMESTAMPDIFF(MINUTE,clocked_in,clocked_out))/60 <= ?)
 			ORDER BY clocked_in ASC";
 
 		file_put_contents("test.txt", $q);
