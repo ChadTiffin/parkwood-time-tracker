@@ -22,8 +22,14 @@ class SettingsController extends BaseController {
 	public function showSettings()
 	{
 
-		$data['settings'] = DB::table("setting_values")
-			->join("settings","settings.id","=","setting_values.setting_id")->get();
+		//$data['settings'] = DB::table("setting_values")
+			//->join("settings","settings.id","=","setting_values.setting_id")->where('user_id','=',Auth::user()->id)->get();
+		$user_id = Auth::user()->id;
+
+		$q = "SELECT setting_values.id as id, value, setting_name, label, type, options, description FROM settings
+		RIGHT JOIN setting_values ON setting_values.setting_id=settings.id
+		WHERE setting_values.user_id = '$user_id'";
+		$data['settings'] = DB::select($q);
 
 		$data['header_data'] = $this->compileHeaderData();
 

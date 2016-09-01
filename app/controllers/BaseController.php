@@ -23,7 +23,7 @@ class BaseController extends Controller {
 	 */
 	public function clockedInTime()
 	{
-		$open_logs = TimeLog::where("clocked_out","=", null)->take(1)->get();
+		$open_logs = TimeLog::where("clocked_out","=", null)->where("user_id","=",Auth::user()->id)->take(1)->get();
 
 		if (count($open_logs) != 0) {
 			return $open_logs[0]->clocked_in;
