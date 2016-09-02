@@ -6,6 +6,7 @@ $(document).ready(function(){
 
 		var action = $(this).attr("action");
 		$.post(action,function(data){
+			console.log(data);
 			if (data == "clocked out") {
 				$('.clock-status').html("Clocked out.");
 				$('#punch-clock input').val("Clock IN").removeClass('btn-warning').addClass("btn-success");;
