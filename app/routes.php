@@ -33,6 +33,7 @@ Route::group(array("before" => "auth"), function(){
 	Route::post("edit", "HomeController@editLog");
 	Route::post("delete-log", "HomeController@deleteLog");
 
+	Route::post("hit-slack","HomeController@msgSlack");
 	Route::post("send-email-report", "HomeController@sendEmailReport");
 
 	Route::post("settings/save-settings", "SettingsController@saveSettings");

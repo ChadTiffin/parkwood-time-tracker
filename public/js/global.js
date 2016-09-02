@@ -6,15 +6,22 @@ $(document).ready(function(){
 
 		var action = $(this).attr("action");
 		$.post(action,function(data){
-			console.log(data);
+			
+			var direction = "";
 			if (data == "clocked out") {
 				$('.clock-status').html("Clocked out.");
-				$('#punch-clock input').val("Clock IN").removeClass('btn-warning').addClass("btn-success");;
+				$('#punch-clock input').val("Clock IN").removeClass('btn-warning').addClass("btn-success");
+
+				direction = "out";
 			}
 			else {
 				$('.clock-status').html("Clocked in at " + data);
 				$('#punch-clock input').val("Clock OUT").removeClass('btn-success').addClass("btn-warning");
+			
+				direction = "in";
 			}
+
+			$.post(BASE_URL + "/hit-slack","direction=" + direction);
 		});
 	})
 
