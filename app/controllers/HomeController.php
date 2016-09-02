@@ -160,6 +160,9 @@ class HomeController extends BaseController {
 
 		$current_time = date("Y-m-d H:i:s");
 
+		$slack_api = "https://hooks.slack.com/services/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";
+		$first_name = Auth::user()->first_name;
+
 		if (!$time_log) {
 			//Punch user IN
 
@@ -168,6 +171,10 @@ class HomeController extends BaseController {
 			$time_log->user_id = $user_id;
 
 			$time_log->save();
+ 
+			//hit the Slack API to display clock in message in #general
+
+			$payload['text'] = "$first_name has clocked in.";
 
 			echo format_datetime($current_time,"time");
 		}
@@ -182,8 +189,14 @@ class HomeController extends BaseController {
 			$time_log->clocked_out = $current_time;
 			$time_log->save();
 
+			//hit the Slack API to display clock out message in #general
+			$payload['text'] = "$first_name has clocked out.";
+
 			echo "clocked out";
 		}
+
+		$message['payload'] = json_encode($payload);
+		httpPost($slack_api,$message);
 	}
 
 	public function editLog()
